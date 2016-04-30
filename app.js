@@ -6,8 +6,7 @@ const mongoose = require('mongoose');
 
 const countries = require('./routes/countries');
 
-const dbName = 'test';
-const connectionString = 'mongodb://localhost:27017/' + dbName;
+const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/test';
 
 mongoose.connect(connectionString);
 

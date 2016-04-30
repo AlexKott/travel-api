@@ -21,7 +21,7 @@ const countrySchema = new Schema({
         other: String
     },
     safetyRating: {
-        rating: int,
+        rating: Number,
         reason: String
     },
     visaRegulations: [
@@ -31,19 +31,19 @@ const countrySchema = new Schema({
         }
     ],
     health: {
-        quality: int,
+        quality: Number,
         warnings: [
             String
         ],
         vaccinations: [
             String
         ],
-        tappedWater: int
+        tappedWater: Number
     },
     emergencyNumbers: [
         {
             name: String,
-            number: int
+            number: Number
         }
     ],
     embassyAdresses: [
@@ -55,7 +55,7 @@ const countrySchema = new Schema({
     religions: [
         {
             name: String,
-            percentage: double
+            percentage: Number
         }
     ],
     events: [
@@ -73,7 +73,7 @@ const countrySchema = new Schema({
     ]
 });
 
-countrySchema.path('name').set(function(n) {
+countrySchema.path('nameEnglish').set(function(n) {
     this._id = createStringId(n);
     return n;
 });
