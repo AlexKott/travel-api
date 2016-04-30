@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+'use strict';
+const app = require('../app');
+
+const port = process.env.PORT || '3000';
+app.set('port', port);
+
+const server = app.listen(app.get('port'), () => {
+    console.log(`travelAPI listening on port ${server.address().port} ...`);
+});

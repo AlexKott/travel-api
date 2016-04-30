@@ -1,0 +1,6 @@
+# Editor
+.idea
+travelAPI.iml
+
+# Dependencies
+node_modules
