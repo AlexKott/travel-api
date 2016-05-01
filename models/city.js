@@ -29,6 +29,8 @@ const citySchema = new Schema({
             ref: 'Location'
         }
     ]
+}, {
+    versionKey: false
 });
 
 citySchema.path('nameEnglish').set(function(n) {

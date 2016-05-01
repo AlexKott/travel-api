@@ -10,6 +10,8 @@ const locationSchema = new Schema({
     type: String,
     description: String,
     position: [Number]
+}, {
+    versionKey: false
 });
 
 locationSchema.path('name').set(function(n) {

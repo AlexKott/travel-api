@@ -11,6 +11,8 @@ const languageSchema = new Schema({
         hello: String,
         thank_you: String
     }
+}, {
+    versionKey: false
 });
 
 languageSchema.path('name').set(function(n) {

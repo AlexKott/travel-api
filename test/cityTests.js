@@ -27,4 +27,19 @@ describe('City', function() {
             done();
         });
     });
+    it('should be able to find a city from its custom id', function (done) {
+        const city = {
+            nameEnglish: 'Vienna',
+            description: 'city with id'
+        };
+        City.create(city, function (e, createdCity) {
+            City.findOne({id: 'vienna'}, 'id description', function (err, foundCity) {
+                assert.isNull(err);
+                assert.equal(foundCity.id, 'vienna');
+                assert.equal(foundCity.description, 'city with id');
+                assert.isUndefined(foundCity.nameEnglish);
+                done();
+            });
+        });
+    });
 });

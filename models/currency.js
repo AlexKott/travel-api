@@ -9,6 +9,8 @@ const currencySchema = new Schema({
     name: String,
     exchangeRateEUR: Number,
     exchangeRateUSD: Number
+}, {
+    versionKey: false
 });
 
 currencySchema.path('name').set(function(n) {

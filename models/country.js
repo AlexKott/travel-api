@@ -109,6 +109,8 @@ const countrySchema = new Schema({
             ref: 'Location'
         }
     ]
+}, {
+    versionKey: false
 });
 
 countrySchema.path('nameEnglish').set(function(n) {

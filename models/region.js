@@ -32,6 +32,8 @@ const regionSchema = new Schema({
             ref: 'Location'
         }
     ]
+}, {
+    versionKey: false
 });
 
 regionSchema.path('name').set(function(n) {
