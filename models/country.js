@@ -70,7 +70,11 @@ const countrySchema = new Schema({
             name: String,
             url: String
         }
-    ]
+    ],
+    capital: {
+        type: Schema.Types.ObjectId,
+        ref: 'City'
+    }
 });
 
 countrySchema.path('nameEnglish').set(function(n) {

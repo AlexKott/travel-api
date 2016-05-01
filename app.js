@@ -3,14 +3,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('./config');
+const app = express();
 
 const countries = require('./routes/countries');
 
-const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/test';
+app.set('dbUrl', config.db[app.settings.env]);
+mongoose.connect(app.get('dbUrl'));
 
-mongoose.connect(connectionString);
+console.log(app.get('dbUrl'));
 
-const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
