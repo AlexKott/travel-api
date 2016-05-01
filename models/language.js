@@ -6,10 +6,16 @@ const createStringId = require('../utils/createStringId');
 
 const languageSchema = new Schema({
     id: String,
-    name: String,
-    translations: {
-        hello: String,
-        thank_you: String
+    type: {
+        type: String,
+        default: 'languages'
+    },
+    attributes: {
+        name: String,
+        translations: {
+            hello: String,
+            thank_you: String
+        }
     }
 }, {
     versionKey: false

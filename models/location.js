@@ -6,10 +6,16 @@ const createStringId = require('../utils/createStringId');
 
 const locationSchema = new Schema({
     id: String,
-    name: String,
-    type: String,
-    description: String,
-    position: [Number]
+    type: {
+        type: String,
+        default: 'locations'
+    },
+    attributes: {
+        name: String,
+        type: String,
+        description: String,
+        position: [Number]
+    }
 }, {
     versionKey: false
 });

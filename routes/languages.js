@@ -14,7 +14,7 @@ router.route('/languages')
             if (err) {
                 return res.send(err);
             }
-            res.json(languages);
+            res.json({ data: languages });
         })
     })
     .post( (req, res) => {
@@ -34,7 +34,7 @@ router.route('/languages/:id')
             if (err) {
                 return res.send(err);
             }
-            res.json(language);
+            res.json({ data: language });
         });
     })
 

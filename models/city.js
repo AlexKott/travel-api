@@ -6,34 +6,48 @@ const createStringId = require('../utils/createStringId');
 
 const citySchema = new Schema({
     id: String,
-    nameLocal: String,
-    nameEnglish: String,
-    description: String,
-    publicTransport: String,
-    position: [Number],
-    safetyRating: {
-        rating: Number,
-        reason: String
+    type: {
+        type: String,
+        default: 'cities'
     },
-    country: {
-        type: Schema.Types.ObjectId,
-        ref: 'Country'
-    },
-    region: {
-        type: Schema.Types.ObjectId,
-        ref: 'Region'
-    },
-    locations: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Location'
+    attributes: {
+        nameLocal: String,
+        nameEnglish: String,
+        description: String,
+        publicTransport: String,
+        position: [Number],
+        safetyRating: {
+            rating: Number,
+            reason: String
         }
-    ]
+    },
+    relationships: {
+        country: {
+            data: {
+                type: Schema.Types.ObjectId,
+                ref: 'Country'
+            }
+        },
+        region: {
+            data: {
+                type: Schema.Types.ObjectId,
+                ref: 'Region'
+            }
+        },
+        locations: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Location'
+                }
+            ]
+        }
+    }
 }, {
     versionKey: false
 });
 
-citySchema.path('nameEnglish').set(function(n) {
+citySchema.path('attributes.nameEnglish').set(function(n) {
     this.id = createStringId(n);
     return n;
 });

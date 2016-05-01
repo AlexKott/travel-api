@@ -6,9 +6,15 @@ const createStringId = require('../utils/createStringId');
 
 const currencySchema = new Schema({
     id: String,
-    name: String,
-    exchangeRateEUR: Number,
-    exchangeRateUSD: Number
+    type: {
+        type: String,
+        default: 'currencies'
+    },
+    attributes: {
+        name: String,
+        exchangeRateEUR: Number,
+        exchangeRateUSD: Number
+    }
 }, {
     versionKey: false
 });

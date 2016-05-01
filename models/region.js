@@ -6,32 +6,46 @@ const createStringId = require('../utils/createStringId');
 
 const regionSchema = new Schema({
     id: String,
-    name: String,
-    description: String,
-    notable: [
-        {
-            name: String,
-            description: String
+    type: {
+        type: String,
+        default: 'countries'
+    },
+    attributes: {
+        name: String,
+        description: String,
+        notable: [
+            {
+                name: String,
+                description: String
+            }
+        ]
+    },
+    relationships: {
+        countries: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Country'
+                }
+            ]
+        },
+        cities: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'City'
+                }
+            ]
+        },
+        locations: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Location'
+                }
+            ]
         }
-    ],
-    countries: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Country'
-        }
-    ],
-    cities: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'City'
-        }
-    ],
-    locations: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Location'
-        }
-    ]
+    }
 }, {
     versionKey: false
 });

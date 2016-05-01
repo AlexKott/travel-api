@@ -5,21 +5,24 @@ const router = express.Router();
 const Country = require('../models/country');
 
 const countryConfig = {
-    getAll: '-_id id nameEnglish nameOriginal description flag safetyRating capital',
-    getOne: ''
+    getAll: '-_id type id',
+    getOne: '-_id',
+    popRel: '-_id type id'
 };
 
 router.route('/countries')
     .get( (req, res) => {
-        Country.find({}, countryConfig.getAll, (err, countries) => {
-            if (err) {
-                return res.send(err);
-            }
-            res.json(countries);
-        });
+        Country.find({}, countryConfig.getAll)
+            .populate('relationships.capital.data', countryConfig.popRel)
+            .exec( (err, countries) => {
+                if (err) {
+                    return res.send(err);
+                }
+                res.json({ data: countries });
+            });
     })
     .post( (req, res) => {
-        const country = new Country(req.body);
+        const country = new Country(req.body.data);
 
         country.save( (err) => {
             if (err) {
@@ -31,12 +34,14 @@ router.route('/countries')
 
 router.route('/countries/:id')
     .get( (req, res) => {
-        Country.findOne({id: req.params.id}, countryConfig.getOne, (err, country) => {
-            if (err) {
-                return res.send(err);
-            }
-            res.json(country);
-        });
+        Country.findOne({id: req.params.id}, countryConfig.getOne)
+            .populate('relationships.capital.data', countryConfig.popRel)
+            .exec( (err, country) => {
+                if (err) {
+                    return res.send(err);
+                }
+                res.json({ data: country });
+            });
     })
     .delete( (req, res) => {
         Country.findOneAndRemove({id: req.params.id}, (err, country) => {

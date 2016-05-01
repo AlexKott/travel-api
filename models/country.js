@@ -6,114 +6,132 @@ const createStringId = require('../utils/createStringId');
 
 const countrySchema = new Schema({
     id: String,
-    nameLocal: String,
-    nameEnglish: String,
-    description: String,
-    flag: String,
-    money: String,
-    politics: String,
-    importExport: String,
-    culture: String,
-    publicTransport: String,
-    trafficRules: {
-        speedLimits: String,
-        driversLicense: String,
-        other: String
+    type: {
+        type: String,
+        default: 'countries'
     },
-    safetyRating: {
-        rating: Number,
-        reason: String
-    },
-    visaRegulations: [
-        {
-            country: String,
-            description: String
-        }
-    ],
-    health: {
-        quality: Number,
-        warnings: [
-            String
+    attributes: {
+        nameLocal: String,
+        nameEnglish: String,
+        description: String,
+        flag: String,
+        money: String,
+        politics: String,
+        importExport: String,
+        culture: String,
+        publicTransport: String,
+        trafficRules: {
+            speedLimits: String,
+            driversLicense: String,
+            other: String
+        },
+        safetyRating: {
+            rating: Number,
+            reason: String
+        },
+        visaRegulations: [
+            {
+                country: String,
+                description: String
+            }
         ],
-        vaccinations: [
-            String
+        health: {
+            quality: Number,
+            warnings: [String],
+            vaccinations: [String],
+            tappedWater: Number
+        },
+        emergencyNumbers: [
+            {
+                name: String,
+                number: Number
+            }
         ],
-        tappedWater: Number
+        embassyAdresses: [
+            {
+                country: String,
+                address: String
+            }
+        ],
+        religions: [
+            {
+                name: String,
+                percentage: Number
+            }
+        ],
+        events: [
+            {
+                name: String,
+                date: Date
+            }
+        ],
+        links: [
+            {
+                type: String,
+                name: String,
+                url: String
+            }
+        ]
     },
-    emergencyNumbers: [
-        {
-            name: String,
-            number: Number
+    relationships: {
+        capital: {
+            data: {
+                type: Schema.Types.ObjectId,
+                ref: 'City'
+            }
+        },
+        cities: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'City'
+                }
+            ]
+        },
+        regions: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Region'
+                }
+            ]
+        },
+        languagesOfficial: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Language'
+                }
+            ]
+        },
+        languagesMinority: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Language'
+                }
+            ]
+        },
+        currency: {
+            data: {
+                type: Schema.Types.ObjectId,
+                ref: 'Currency'
+            }
+        },
+        locations: {
+            data: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Location'
+                }
+            ]
         }
-    ],
-    embassyAdresses: [
-        {
-            country: String,
-            address: String
-        }
-    ],
-    religions: [
-        {
-            name: String,
-            percentage: Number
-        }
-    ],
-    events: [
-        {
-            name: String,
-            date: Date
-        }
-    ],
-    links: [
-        {
-            type: String,
-            name: String,
-            url: String
-        }
-    ],
-    capital: {
-        type: Schema.Types.ObjectId,
-        ref: 'City'
-    },
-    cities: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'City'
-        }
-    ],
-    regions: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Region'
-        }
-    ],
-    languagesOfficial: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Language'
-        }
-    ],
-    languagesMinority: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Language'
-        }
-    ],
-    currency: {
-        type: Schema.Types.ObjectId,
-        ref: 'Currency'
-    },
-    locations: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Location'
-        }
-    ]
+    }
 }, {
     versionKey: false
 });
 
-countrySchema.path('nameEnglish').set(function(n) {
+countrySchema.path('attributes.nameEnglish').set(function(n) {
     this.id = createStringId(n);
     return n;
 });

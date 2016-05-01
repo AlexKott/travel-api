@@ -14,7 +14,7 @@ router.route('/locations')
             if (err) {
                 return res.send(err);
             }
-            res.json(locations);
+            res.json({ data: locations });
         })
     })
     .post( (req, res) => {
@@ -34,7 +34,7 @@ router.route('/locations/:id')
             if (err) {
                 return res.send(err);
             }
-            res.json(location);
+            res.json({ data: location });
         });
     })
 

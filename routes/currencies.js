@@ -14,7 +14,7 @@ router.route('/currencies')
             if (err) {
                 return res.send(err);
             }
-            res.json(currencies);
+            res.json({data: currencies });
         })
     })
     .post( (req, res) => {
@@ -34,7 +34,7 @@ router.route('/currencies/:id')
             if (err) {
                 return res.send(err);
             }
-            res.json(currency);
+            res.json({data: currency });
         });
     })
 
