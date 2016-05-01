@@ -9,7 +9,7 @@ const utils = require('./utils');
 describe('City', function() {
     it('should create a new city', function (done) {
         const city = {
-            nameOriginal: 'Wien',
+            nameLocal: 'Wien',
             nameEnglish: 'Vienna',
             description: 'A city in Austria',
             publicTransport: 'working',
@@ -21,9 +21,9 @@ describe('City', function() {
         };
         City.create(city, function(err, createdCity) {
             assert.isNull(err);
-            assert.equal(createdCity.get('_id'), 'vienna');
-            assert.equal(createdCity.get('publicTransport'), 'working');
-            assert.equal(createdCity.get('position')[0], 48.210077);
+            assert.equal(createdCity.id, 'vienna');
+            assert.equal(createdCity.publicTransport, 'working');
+            assert.equal(createdCity.position[0], 48.210077);
             done();
         });
     });

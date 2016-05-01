@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const regionSchema = new Schema({
-    _id: String,
+    id: String,
     name: String,
     description: String,
     notable: [
@@ -13,11 +13,29 @@ const regionSchema = new Schema({
             name: String,
             description: String
         }
+    ],
+    countries: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Country'
+        }
+    ],
+    cities: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'City'
+        }
+    ],
+    locations: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Location'
+        }
     ]
 });
 
 regionSchema.path('name').set(function(n) {
-    this._id = createStringId(n);
+    this.id = createStringId(n);
     return n;
 });
 
