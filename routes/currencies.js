@@ -30,7 +30,7 @@ router.route('/currencies')
 
 router.route('/currencies/:id')
     .get( (req, res) => {
-        Currency.findOne({id: req.params.id}, currencyConfig.getOne, (err, currency) => {
+        Currency.findOne({_id: req.params.id}, currencyConfig.getOne, (err, currency) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }

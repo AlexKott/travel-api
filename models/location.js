@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const locationSchema = new Schema({
-    id: String,
+    _id: String,
     type: {
         type: String,
         default: 'locations'
@@ -21,7 +21,7 @@ const locationSchema = new Schema({
 });
 
 locationSchema.path('name').set(function(n) {
-    this.id = createStringId(n);
+    this._id = createStringId(n);
     return n;
 });
 

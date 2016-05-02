@@ -30,7 +30,7 @@ router.route('/languages')
 
 router.route('/languages/:id')
     .get( (req, res) => {
-        Language.findOne({id: req.params.id}, languageConfig.getOne, (err, language) => {
+        Language.findOne({_id: req.params.id}, languageConfig.getOne, (err, language) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }

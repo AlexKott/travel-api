@@ -5,9 +5,9 @@ const router = express.Router();
 const Country = require('../models/country');
 
 const countryConfig = {
-    getAll: '-_id type id',
-    getOne: '-_id',
-    popRel: '-_id type id'
+    getAll: '_id type',
+    getOne: '',
+    popRel: '_id type'
 };
 
 router.route('/countries')
@@ -34,7 +34,7 @@ router.route('/countries')
 
 router.route('/countries/:id')
     .get( (req, res) => {
-        Country.findOne({id: req.params.id}, countryConfig.getOne)
+        Country.findOne({_id: req.params.id}, countryConfig.getOne)
             .populate('relationships.capital.data', countryConfig.popRel)
             .exec( (err, country) => {
                 if (err) {
@@ -44,11 +44,14 @@ router.route('/countries/:id')
             });
     })
     .delete( (req, res) => {
-        Country.findOneAndRemove({id: req.params.id}, (err, country) => {
+        Country.findOneAndRemove({_id: req.params.id}, (err, country) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }
-            res.send({ data: { message: `Country ${country.id} deleted!`} });
+            if (!country) {
+                return res.send({ errors: [{ message: `Not found!` }]})
+            }
+            res.send({ data: { message: `Country ${id} deleted!`} });
         });
     })
 

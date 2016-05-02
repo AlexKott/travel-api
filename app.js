@@ -4,6 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const config = require('./config');
 const app = express();
 
@@ -24,9 +25,28 @@ app.use( (req, res, next) => {
     next();
 });
 
+app.use(auth);
+app.use( (req, res, next) => {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
 
+    if (!token) {
+        return res.status(403).send({
+            errors: [{
+                    success: false,
+                    message: 'No access token provided.'
+            }]
+        });
+    }
+
+    jwt.verify(token, config.authSecret, (err, decoded) => {
+        if (err) {
+            return res.send({ errors: [{ success: false, message: 'Access token not valid.' }] })
+        }
+        req.decoded = decoded;
+        next();
+    });
+});
 app.use(countries);
 app.use(cities);
-app.use(auth);
 
 module.exports = app;

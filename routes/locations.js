@@ -30,7 +30,7 @@ router.route('/locations')
 
 router.route('/locations/:id')
     .get( (req, res) => {
-        Location.findOne({id: req.params.id}, locationConfig.getOne, (err, location) => {
+        Location.findOne({_id: req.params.id}, locationConfig.getOne, (err, location) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }

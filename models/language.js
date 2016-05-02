@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const languageSchema = new Schema({
-    id: String,
+    _id: String,
     type: {
         type: String,
         default: 'languages'
@@ -22,7 +22,7 @@ const languageSchema = new Schema({
 });
 
 languageSchema.path('name').set(function(n) {
-    this.id = createStringId(n);
+    this._id = createStringId(n);
     return n;
 });
 

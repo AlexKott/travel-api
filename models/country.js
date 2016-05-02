@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const countrySchema = new Schema({
-    id: String,
+    _id: String,
     type: {
         type: String,
         default: 'countries'
@@ -76,14 +76,14 @@ const countrySchema = new Schema({
     relationships: {
         capital: {
             data: {
-                type: Schema.Types.ObjectId,
+                type: String,
                 ref: 'City'
             }
         },
         cities: {
             data: [
                 {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'City'
                 }
             ]
@@ -91,7 +91,7 @@ const countrySchema = new Schema({
         regions: {
             data: [
                 {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'Region'
                 }
             ]
@@ -99,7 +99,7 @@ const countrySchema = new Schema({
         languagesOfficial: {
             data: [
                 {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'Language'
                 }
             ]
@@ -107,21 +107,21 @@ const countrySchema = new Schema({
         languagesMinority: {
             data: [
                 {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'Language'
                 }
             ]
         },
         currency: {
             data: {
-                type: Schema.Types.ObjectId,
+                type: String,
                 ref: 'Currency'
             }
         },
         locations: {
             data: [
                 {
-                    type: Schema.Types.ObjectId,
+                    type: String,
                     ref: 'Location'
                 }
             ]
@@ -132,7 +132,7 @@ const countrySchema = new Schema({
 });
 
 countrySchema.path('attributes.nameEnglish').set(function(n) {
-    this.id = createStringId(n);
+    this._id = createStringId(n);
     return n;
 });
 

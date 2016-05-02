@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const currencySchema = new Schema({
-    id: String,
+    _id: String,
     type: {
         type: String,
         default: 'currencies'
@@ -20,7 +20,7 @@ const currencySchema = new Schema({
 });
 
 currencySchema.path('name').set(function(n) {
-    this.id = createStringId(n);
+    this._id = createStringId(n);
     return n;
 });
 

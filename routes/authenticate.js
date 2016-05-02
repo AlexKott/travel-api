@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const secret = require('../config').secret;
+const secret = require('../config').authSecret;
 
 const validCredentials = { // change this to user model if needed
     name: 'traveller',
@@ -15,13 +15,13 @@ router.post('/authenticate', (req, res) => {
     const givenPassword = req.body.password;
 
     if (givenName !== validCredentials.name) {
-        return res.send({ data: { success: false, message: 'Authentication failed. User not found.' } });
+        return res.send({ errors: [{ success: false, message: 'Authentication failed. User not found.' }] });
     }
     if (givenPassword !== validCredentials.password) {
-        return res.send({ data: { success: false, message: 'Authentication failed. Wrong password' } });
+        return res.send({ errors: [{ success: false, message: 'Authentication failed. Wrong password' }] });
     }
 
-    const token = jwt.sign(validCredentials, secret, { expiresIn: '2m' });
+    const token = jwt.sign(validCredentials, secret, { expiresIn: '7d' });
 
     return res.send({ data: {
         success: true,

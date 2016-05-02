@@ -4,9 +4,9 @@ const router = express.Router();
 const City = require('../models/city');
 
 const cityConfig = {
-    getAll: '-_id type id attributes relationships',
-    getOne: '-_id',
-    popRel: '-_id type id'
+    getAll: '_id type',
+    getOne: '',
+    popRel: '_id type attributes.description'
 }
 
 router.route('/cities')
@@ -33,7 +33,7 @@ router.route('/cities')
 
 router.route('/cities/:id')
     .get( (req, res) => {
-        City.findOne({id: req.params.id}, cityConfig.getOne)
+        City.findOne({_id: req.params.id}, cityConfig.getOne)
             .populate('relationships.country.data', cityConfig.popRel)
             .exec( (err, city) => {
                 if (err) {
@@ -43,7 +43,7 @@ router.route('/cities/:id')
             });
     })
     .put( (req, res) => {
-        City.findOneAndUpdate({id: req.params.id}, req.body, (err, city) => {
+        City.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, city) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }
@@ -51,11 +51,14 @@ router.route('/cities/:id')
         });
     })
     .delete( (req, res) => {
-        City.findOneAndRemove({id: req.params.id}, (err, city) => {
+        City.findOneAndRemove({_id: req.params.id}, (err, city) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }
-            res.send({ data: { message: `City ${city.id} deleted!`} });
+            if (!city) {
+                return res.send({ errors: [{ message: `Not found!` }]})
+            }
+            res.send({ data: { message: `City ${id} deleted!`} });
         });
     });
 

@@ -4,5 +4,5 @@ module.exports = {
         development: "mongodb://localhost:27017/travelapi-dev",
         test: "mongodb://localhost:27017/travelapi-test",
     },
-    secret: 'travel secret'
+    authSecret: 'travel secret'
 };
