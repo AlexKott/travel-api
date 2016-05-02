@@ -15,11 +15,9 @@ router.route('/cities')
             .populate('relationships.country.data', cityConfig.popRel)
             .exec( (err, cities) => {
                 if (err) {
-                    return res.send(err);
+                    return res.send({ errors: [ err ] });
                 }
-                res.json({
-                    data: cities
-                });
+                res.send({ data: cities });
             });
     })
     .post( (req, res) => {
@@ -27,9 +25,9 @@ router.route('/cities')
 
         city.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            return res.send({ message: 'City added.' });
+            return res.send({ data: { message: 'City added.' } });
         });
     });
 
@@ -39,25 +37,25 @@ router.route('/cities/:id')
             .populate('relationships.country.data', cityConfig.popRel)
             .exec( (err, city) => {
                 if (err) {
-                    return res.send(err);
+                    return res.send({ errors: [ err ] });
                 }
-                res.json({ data: city });
+                res.send({ data: city });
             });
     })
     .put( (req, res) => {
         City.findOneAndUpdate({id: req.params.id}, req.body, (err, city) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: city });
+            res.send({ data: city });
         });
     })
     .delete( (req, res) => {
         City.findOneAndRemove({id: req.params.id}, (err, city) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.send({ message: `City ${city.id} deleted!`});
+            res.send({ data: { message: `City ${city.id} deleted!`} });
         });
     });
 

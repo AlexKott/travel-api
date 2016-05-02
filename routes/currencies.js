@@ -12,9 +12,9 @@ router.route('/currencies')
     .get( (req, res) => {
         Currency.find({}, currencyConfig.getAll, (err, currencies) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({data: currencies });
+            res.send({ data: currencies });
         })
     })
     .post( (req, res) => {
@@ -22,9 +22,9 @@ router.route('/currencies')
 
         currency.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            return res.send({ message: 'Currency added.' });
+            return res.send({ data: { message: 'Currency added.' } });
         });
     });
 
@@ -32,9 +32,9 @@ router.route('/currencies/:id')
     .get( (req, res) => {
         Currency.findOne({id: req.params.id}, currencyConfig.getOne, (err, currency) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({data: currency });
+            res.send({ data: currency });
         });
     })
 

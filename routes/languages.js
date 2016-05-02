@@ -12,9 +12,9 @@ router.route('/languages')
     .get( (req, res) => {
         Language.find({}, languageConfig.getAll, (err, languages) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: languages });
+            res.send({ data: languages });
         })
     })
     .post( (req, res) => {
@@ -22,9 +22,9 @@ router.route('/languages')
 
         language.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            return res.send({ message: 'Language added.' });
+            return res.send({ data: { message: 'Language added.' } });
         });
     });
 
@@ -32,9 +32,9 @@ router.route('/languages/:id')
     .get( (req, res) => {
         Language.findOne({id: req.params.id}, languageConfig.getOne, (err, language) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: language });
+            res.send({ data: language });
         });
     })
 

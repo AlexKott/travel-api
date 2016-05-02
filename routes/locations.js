@@ -12,9 +12,9 @@ router.route('/locations')
     .get( (req, res) => {
         Location.find({}, locationConfig.getAll, (err, locations) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: locations });
+            res.send({ data: locations });
         })
     })
     .post( (req, res) => {
@@ -22,9 +22,9 @@ router.route('/locations')
 
         location.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            return res.send({ message: 'Location added.' });
+            return res.send({ data: { message: 'Location added.' } });
         });
     });
 
@@ -32,9 +32,9 @@ router.route('/locations/:id')
     .get( (req, res) => {
         Location.findOne({id: req.params.id}, locationConfig.getOne, (err, location) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: location });
+            res.send({ data: location });
         });
     })
 

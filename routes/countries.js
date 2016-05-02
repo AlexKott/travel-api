@@ -16,9 +16,9 @@ router.route('/countries')
             .populate('relationships.capital.data', countryConfig.popRel)
             .exec( (err, countries) => {
                 if (err) {
-                    return res.send(err);
+                    return res.send({ errors: [ err ] });
                 }
-                res.json({ data: countries });
+                res.send({ data: countries });
             });
     })
     .post( (req, res) => {
@@ -26,9 +26,9 @@ router.route('/countries')
 
         country.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.send({ message: 'Country added.' });
+            res.send({ data: { message: 'Country added.' } });
         });
     });
 
@@ -38,17 +38,17 @@ router.route('/countries/:id')
             .populate('relationships.capital.data', countryConfig.popRel)
             .exec( (err, country) => {
                 if (err) {
-                    return res.send(err);
+                    return res.send({ errors: [ err ] });
                 }
-                res.json({ data: country });
+                res.send({ data: country });
             });
     })
     .delete( (req, res) => {
         Country.findOneAndRemove({id: req.params.id}, (err, country) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.send({ message: `Country ${country.id} deleted!`});
+            res.send({ data: { message: `Country ${country.id} deleted!`} });
         });
     })
 

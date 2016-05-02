@@ -12,9 +12,9 @@ router.route('/regions')
     .get( (req, res) => {
         Region.find({}, regionConfig.getAll, (err, regions) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: regions });
+            res.send({ data: regions });
         })
     })
     .post( (req, res) => {
@@ -22,9 +22,9 @@ router.route('/regions')
 
         region.save( (err) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            return res.send({ message: 'Region added.' });
+            return res.send({ data: { message: 'Region added.' } });
         });
     });
 
@@ -32,9 +32,9 @@ router.route('/regions/:id')
     .get( (req, res) => {
         Region.findOne({id: req.params.id}, regionConfig.getOne, (err, region) => {
             if (err) {
-                return res.send(err);
+                return res.send({ errors: [ err ] });
             }
-            res.json({ data: region });
+            res.send({ data: region });
         });
     })
 

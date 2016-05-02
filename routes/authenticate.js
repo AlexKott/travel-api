@@ -15,19 +15,19 @@ router.post('/authenticate', (req, res) => {
     const givenPassword = req.body.password;
 
     if (givenName !== validCredentials.name) {
-        return res.json({ success: false, message: 'Authentication failed. User not found.' });
+        return res.send({ data: { success: false, message: 'Authentication failed. User not found.' } });
     }
     if (givenPassword !== validCredentials.password) {
-        return res.json({ success: false, message: 'Authentication failed. Wrong password' })
+        return res.send({ data: { success: false, message: 'Authentication failed. Wrong password' } });
     }
 
     const token = jwt.sign(validCredentials, secret, { expiresIn: '2m' });
 
-    return res.json({
+    return res.send({ data: {
         success: true,
         message: 'Authentication successful',
         token: token
-    });
+    } });
 });
 
 module.exports = router;
