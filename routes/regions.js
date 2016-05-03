@@ -4,8 +4,8 @@ const router = express.Router();
 const Region = require('../models/region');
 
 const regionConfig = {
-    getAll: '-_id',
-    getOne: '-_id'
+    getAll: '_id type',
+    getOne: ''
 }
 
 router.route('/regions')
@@ -18,7 +18,7 @@ router.route('/regions')
         })
     })
     .post( (req, res) => {
-        const region = new Region(req.body);
+        const region = new Region(req.body.data);
 
         region.save( (err) => {
             if (err) {
@@ -37,5 +37,24 @@ router.route('/regions/:id')
             res.send({ data: region });
         });
     })
+    .put( (req, res) => {
+        Region.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, region) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            res.send({ data: region });
+        });
+    })
+    .delete( (req, res) => {
+        Region.findOneAndRemove({_id: req.params.id}, (err, region) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            if (!region) {
+                return res.send({ errors: [{ message: `Not found!` }]})
+            }
+            res.send({ data: { message: `Region ${region._id} deleted!`} });
+        });
+    });
 
 module.exports = router;

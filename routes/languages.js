@@ -4,8 +4,8 @@ const router = express.Router();
 const Language = require('../models/language');
 
 const languageConfig = {
-    getAll: '-_id',
-    getOne: '-_id'
+    getAll: '_id type',
+    getOne: ''
 }
 
 router.route('/languages')
@@ -18,7 +18,7 @@ router.route('/languages')
         })
     })
     .post( (req, res) => {
-        const language = new Language(req.body);
+        const language = new Language(req.body.data);
 
         language.save( (err) => {
             if (err) {
@@ -37,5 +37,24 @@ router.route('/languages/:id')
             res.send({ data: language });
         });
     })
+    .put( (req, res) => {
+        Language.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, language) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            res.send({ data: language });
+        });
+    })
+    .delete( (req, res) => {
+        Language.findOneAndRemove({_id: req.params.id}, (err, language) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            if (!language) {
+                return res.send({ errors: [{ message: `Not found!` }]})
+            }
+            res.send({ data: { message: `Language ${language._id} deleted!`} });
+        });
+    });
 
 module.exports = router;

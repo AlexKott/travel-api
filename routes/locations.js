@@ -4,8 +4,8 @@ const router = express.Router();
 const Location = require('../models/location');
 
 const locationConfig = {
-    getAll: '-_id',
-    getOne: '-_id'
+    getAll: '_id type',
+    getOne: ''
 }
 
 router.route('/locations')
@@ -18,7 +18,7 @@ router.route('/locations')
         })
     })
     .post( (req, res) => {
-        const location = new Location(req.body);
+        const location = new Location(req.body.data);
 
         location.save( (err) => {
             if (err) {
@@ -37,5 +37,24 @@ router.route('/locations/:id')
             res.send({ data: location });
         });
     })
+    .put( (req, res) => {
+        Location.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, location) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            res.send({ data: location });
+        });
+    })
+    .delete( (req, res) => {
+        Location.findOneAndRemove({_id: req.params.id}, (err, location) => {
+            if (err) {
+                return res.send({ errors: [ err ] });
+            }
+            if (!location) {
+                return res.send({ errors: [{ message: `Not found!` }]})
+            }
+            res.send({ data: { message: `Location ${location._id} deleted!`} });
+        });
+    });
 
 module.exports = router;

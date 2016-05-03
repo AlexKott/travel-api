@@ -6,13 +6,15 @@ const City = require('../models/city');
 const cityConfig = {
     getAll: '_id type',
     getOne: '',
-    popRel: '_id type attributes.description'
+    popRel: '_id type'
 }
 
 router.route('/cities')
     .get( (req, res) => {
         City.find({}, cityConfig.getAll)
             .populate('relationships.country.data', cityConfig.popRel)
+            .populate('relationships.region.data', cityConfig.popRel)
+            .populate('relationships.locations.data', cityConfig.popRel)
             .exec( (err, cities) => {
                 if (err) {
                     return res.send({ errors: [ err ] });
@@ -35,6 +37,8 @@ router.route('/cities/:id')
     .get( (req, res) => {
         City.findOne({_id: req.params.id}, cityConfig.getOne)
             .populate('relationships.country.data', cityConfig.popRel)
+            .populate('relationships.region.data', cityConfig.popRel)
+            .populate('relationships.locations.data', cityConfig.popRel)
             .exec( (err, city) => {
                 if (err) {
                     return res.send({ errors: [ err ] });
@@ -58,7 +62,7 @@ router.route('/cities/:id')
             if (!city) {
                 return res.send({ errors: [{ message: `Not found!` }]})
             }
-            res.send({ data: { message: `City ${id} deleted!`} });
+            res.send({ data: { message: `City ${city._id} deleted!`} });
         });
     });
 
