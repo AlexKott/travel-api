@@ -12,7 +12,9 @@ const locationSchema = new Schema({
     },
     attributes: {
         name: String,
-        type: String,
+        type: {
+            type: String
+        },
         description: String,
         position: [Number]
     }
@@ -20,7 +22,7 @@ const locationSchema = new Schema({
     versionKey: false
 });
 
-locationSchema.path('name').set(function(n) {
+locationSchema.path('attributes.name').set(function(n) {
     this._id = createStringId(n);
     return n;
 });

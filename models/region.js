@@ -50,7 +50,7 @@ const regionSchema = new Schema({
     versionKey: false
 });
 
-regionSchema.path('name').set(function(n) {
+regionSchema.path('attributes.name').set(function(n) {
     this._id = createStringId(n);
     return n;
 });

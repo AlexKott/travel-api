@@ -21,7 +21,7 @@ const languageSchema = new Schema({
     versionKey: false
 });
 
-languageSchema.path('name').set(function(n) {
+languageSchema.path('attributes.name').set(function(n) {
     this._id = createStringId(n);
     return n;
 });

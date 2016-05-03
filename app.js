@@ -8,8 +8,19 @@ const jwt = require('jsonwebtoken');
 const config = require('./config');
 const app = express();
 
+require('./models/city');
+require('./models/country');
+require('./models/currency');
+require('./models/language');
+require('./models/location');
+require('./models/region');
+
 const countries = require('./routes/countries');
 const cities = require('./routes/cities');
+const currencies = require('./routes/currencies');
+const languages = require('./routes/languages');
+const locations = require('./routes/locations');
+const regions = require('./routes/regions');
 const auth = require('./routes/authenticate');
 
 app.set('dbUrl', config.db[app.settings.env]);
@@ -26,6 +37,7 @@ app.use( (req, res, next) => {
 });
 
 app.use(auth);
+
 app.use( (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -46,7 +58,12 @@ app.use( (req, res, next) => {
         next();
     });
 });
-app.use(countries);
+
 app.use(cities);
+app.use(countries);
+app.use(currencies);
+app.use(languages);
+app.use(locations);
+app.use(regions);
 
 module.exports = app;

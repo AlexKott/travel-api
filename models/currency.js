@@ -19,7 +19,7 @@ const currencySchema = new Schema({
     versionKey: false
 });
 
-currencySchema.path('name').set(function(n) {
+currencySchema.path('attributes.name').set(function(n) {
     this._id = createStringId(n);
     return n;
 });
