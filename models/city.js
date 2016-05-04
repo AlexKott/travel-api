@@ -52,4 +52,12 @@ citySchema.path('attributes.nameEnglish').set(function(n) {
     return n;
 });
 
+if (!citySchema.options.toJSON) {
+  citySchema.options.toJSON = {};
+}
+citySchema.options.toJSON.transform = function(doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+};
+
 module.exports = mongoose.model('City', citySchema);

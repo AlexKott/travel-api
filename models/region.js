@@ -55,4 +55,12 @@ regionSchema.path('attributes.name').set(function(n) {
     return n;
 });
 
+if (!regionSchema.options.toJSON) {
+  regionSchema.options.toJSON = {};
+}
+regionSchema.options.toJSON.transform = function(doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+};
+
 module.exports = mongoose.model('Region', regionSchema);

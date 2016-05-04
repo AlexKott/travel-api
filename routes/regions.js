@@ -4,7 +4,7 @@ const router = express.Router();
 const Region = require('../models/region');
 
 const regionConfig = {
-    getAll: '_id type',
+    getAll: 'type attributes',
     getOne: ''
 }
 

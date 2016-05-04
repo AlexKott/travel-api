@@ -5,9 +5,9 @@ const router = express.Router();
 const Country = require('../models/country');
 
 const countryConfig = {
-    getAll: '_id type',
+    getAll: 'type attributes',
     getOne: '',
-    popRel: '_id type'
+    popRel: 'type'
 };
 
 router.route('/countries')

@@ -24,4 +24,12 @@ currencySchema.path('attributes.name').set(function(n) {
     return n;
 });
 
+if (!currencySchema.options.toJSON) {
+  currencySchema.options.toJSON = {};
+}
+currencySchema.options.toJSON.transform = function(doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+};
+
 module.exports = mongoose.model('Currency', currencySchema);

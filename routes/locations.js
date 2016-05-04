@@ -4,7 +4,7 @@ const router = express.Router();
 const Location = require('../models/location');
 
 const locationConfig = {
-    getAll: '_id type',
+    getAll: '',
     getOne: ''
 }
 

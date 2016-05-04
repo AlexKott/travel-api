@@ -4,7 +4,7 @@ const router = express.Router();
 const Currency = require('../models/currency');
 
 const currencyConfig = {
-    getAll: '_id type',
+    getAll: '',
     getOne: ''
 }
 

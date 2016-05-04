@@ -27,4 +27,12 @@ locationSchema.path('attributes.name').set(function(n) {
     return n;
 });
 
+if (!locationSchema.options.toJSON) {
+  locationSchema.options.toJSON = {};
+}
+locationSchema.options.toJSON.transform = function(doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+};
+
 module.exports = mongoose.model('Location', locationSchema);

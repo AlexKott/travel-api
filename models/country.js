@@ -136,4 +136,12 @@ countrySchema.path('attributes.nameEnglish').set(function(n) {
     return n;
 });
 
+if (!countrySchema.options.toJSON) {
+  countrySchema.options.toJSON = {};
+}
+countrySchema.options.toJSON.transform = function(doc, ret) {
+  ret.id = ret._id;
+  delete ret._id;
+};
+
 module.exports = mongoose.model('Country', countrySchema);

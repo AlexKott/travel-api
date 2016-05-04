@@ -4,7 +4,7 @@ const router = express.Router();
 const Language = require('../models/language');
 
 const languageConfig = {
-    getAll: '_id type',
+    getAll: '',
     getOne: ''
 }
 
