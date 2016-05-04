@@ -35,6 +35,11 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use( (req, res, next) => {
+    res.contentType('application/vnd.api+json');
+    next();
+});
+
 app.use(auth);
 
 app.use( (req, res, next) => {
