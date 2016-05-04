@@ -4,7 +4,7 @@ const router = express.Router();
 const City = require('../models/city');
 
 const cityConfig = {
-    getAll: '_id type',
+    getAll: '_id type attributes relationships.country',
     getOne: '',
     popRel: '_id type'
 }
