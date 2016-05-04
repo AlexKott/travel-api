@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const config = require('./config');
 const app = express();
 
@@ -23,6 +24,8 @@ const locations = require('./routes/locations');
 const regions = require('./routes/regions');
 const auth = require('./routes/authenticate');
 
+app.use(cors());
+
 app.set('dbUrl', config.db[app.settings.env]);
 mongoose.connect(app.get('dbUrl'));
 
@@ -31,12 +34,6 @@ console.log('MongoUrl: ' + app.get('dbUrl'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use( (req, res, next) => {
-    res.header('Content-Type', 'application/vnd.api+json');
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 app.use(auth);
 
