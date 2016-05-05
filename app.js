@@ -34,6 +34,7 @@ console.log('MongoUrl: ' + app.get('dbUrl'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 
 app.use( (req, res, next) => {
     res.contentType('application/vnd.api+json');
