@@ -1,3 +1,10 @@
 'use strict';
 
-module.exports = (s) => s.toLowerCase().replace(/ /g, '_');
+module.exports = {
+    base (s) {
+        return s.toLowerCase().replace(/ /g, '_');
+    },
+    city (cityName, countryName) {
+        return `${this.base(cityName)}-${this.base(countryName)}`;
+    }
+}

@@ -76,53 +76,95 @@ const countrySchema = new Schema({
     relationships: {
         capital: {
             data: {
-                type: String,
-                ref: 'City'
+                id: {
+                    type: String,
+                    ref: 'City'
+                },
+                type: {
+                    type: String,
+                    default: 'cities'
+                }
             }
         },
         cities: {
             data: [
                 {
-                    type: String,
-                    ref: 'City'
+                    id: {
+                        type: String,
+                        ref: 'City'
+                    },
+                    type: {
+                        type: String,
+                        default: 'cities'
+                    }
                 }
             ]
         },
         regions: {
             data: [
                 {
-                    type: String,
-                    ref: 'Region'
+                    id: {
+                        type: String,
+                        ref: 'Region'
+                    },
+                    type: {
+                        type: String,
+                        default: 'regions'
+                    }
                 }
             ]
         },
         languagesOfficial: {
             data: [
                 {
-                    type: String,
-                    ref: 'Language'
+                    id: {
+                        type: String,
+                        ref: 'Language'
+                    },
+                    type: {
+                        type: String,
+                        default: 'languages'
+                    }
                 }
             ]
         },
         languagesMinority: {
             data: [
                 {
-                    type: String,
-                    ref: 'Language'
+                    id: {
+                        type: String,
+                        ref: 'Language'
+                    },
+                    type: {
+                        type: String,
+                        default: 'languages'
+                    }
                 }
             ]
         },
         currency: {
             data: {
-                type: String,
-                ref: 'Currency'
+                id: {
+                    type: String,
+                    ref: 'Currency'
+                },
+                type: {
+                    type: String,
+                    default: 'currencies'
+                }
             }
         },
         locations: {
             data: [
                 {
-                    type: String,
-                    ref: 'Location'
+                    id: {
+                        type: String,
+                        ref: 'Location'
+                    },
+                    type: {
+                        type: String,
+                        default: 'locations'
+                    }
                 }
             ]
         }

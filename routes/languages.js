@@ -12,7 +12,7 @@ router.route('/languages')
     .get( (req, res) => {
         Language.find({}, languageConfig.getAll, (err, languages) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: languages });
         })
@@ -22,7 +22,7 @@ router.route('/languages')
 
         language.save( (err) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             return res.send({ data: { message: 'Language added.' } });
         });
@@ -32,15 +32,15 @@ router.route('/languages/:id')
     .get( (req, res) => {
         Language.findOne({_id: req.params.id}, languageConfig.getOne, (err, language) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: language });
         });
     })
-    .put( (req, res) => {
+    .patch( (req, res) => {
         Language.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, language) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: language });
         });
@@ -48,7 +48,7 @@ router.route('/languages/:id')
     .delete( (req, res) => {
         Language.findOneAndRemove({_id: req.params.id}, (err, language) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             if (!language) {
                 return res.send({ errors: [{ message: `Not found!` }]})

@@ -12,7 +12,7 @@ router.route('/regions')
     .get( (req, res) => {
         Region.find({}, regionConfig.getAll, (err, regions) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: regions });
         })
@@ -22,7 +22,7 @@ router.route('/regions')
 
         region.save( (err) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             return res.send({ data: { message: 'Region added.' } });
         });
@@ -32,15 +32,15 @@ router.route('/regions/:id')
     .get( (req, res) => {
         Region.findOne({_id: req.params.id}, regionConfig.getOne, (err, region) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: region });
         });
     })
-    .put( (req, res) => {
+    .patch( (req, res) => {
         Region.findOneAndUpdate({_id: req.params.id}, req.body.data, { new: true }, (err, region) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             res.send({ data: region });
         });
@@ -48,7 +48,7 @@ router.route('/regions/:id')
     .delete( (req, res) => {
         Region.findOneAndRemove({_id: req.params.id}, (err, region) => {
             if (err) {
-                return res.send({ errors: [ err ] });
+                return res.send({ errors: [{ status: 500, detail: err }]});
             }
             if (!region) {
                 return res.send({ errors: [{ message: `Not found!` }]})

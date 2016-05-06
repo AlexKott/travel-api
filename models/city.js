@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const createStringId = require('../utils/createStringId');
 
 const citySchema = new Schema({
-    _id: String,
+    id: String,
     type: {
         type: String,
         default: 'cities'
@@ -36,34 +36,38 @@ const citySchema = new Schema({
         },
         region: {
             data: {
-                type: String,
-                ref: 'Region'
+                id: {
+                    type: String,
+                    ref: 'Region'
+                },
+                type: {
+                    type: String,
+                    default: 'regions'
+                }
             }
         },
         locations: {
             data: [
                 {
-                    type: String,
-                    ref: 'Location'
+                    id: {
+                        type: String,
+                        ref: 'Location'
+                    },
+                    type: {
+                        type: String,
+                        default: 'locations'
+                    }
                 }
             ]
         }
     }
 }, {
-    versionKey: false
+    versionKey: false,
+    toJSON: {
+        transform(doc, ret) {
+            delete ret._id;
+        }
+    }
 });
-
-citySchema.path('attributes.nameEnglish').set(function(n) {
-    this._id = createStringId(n);
-    return n;
-});
-
-if (!citySchema.options.toJSON) {
-  citySchema.options.toJSON = {};
-}
-citySchema.options.toJSON.transform = function(doc, ret) {
-  ret.id = ret._id;
-  delete ret._id;
-};
 
 module.exports = mongoose.model('City', citySchema);
