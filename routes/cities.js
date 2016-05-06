@@ -6,15 +6,13 @@ const City = require('../models/city');
 const cityConfig = {
     getAll: 'type attributes relationships.country',
     getOne: '',
-    popRel: 'type'
+    popRel: 'id'
 }
 
 router.route('/cities')
     .get( (req, res) => {
         City.find({}, cityConfig.getAll)
-            .populate('relationships.country.data', cityConfig.popRel)
-            .populate('relationships.region.data', cityConfig.popRel)
-            .populate('relationships.locations.data', cityConfig.popRel)
+            //.populate('relationships.country.data.id', cityConfig.popRel)
             .exec( (err, cities) => {
                 if (err) {
                     return res.send({ errors: [ err ] });
@@ -23,22 +21,26 @@ router.route('/cities')
             });
     })
     .post( (req, res) => {
+        // let id = req.body.data.relationships.country.data.id;
+        // req.body.data.relationships.country.data._id = id ;
+        // delete req.body.data.relationships.country.data.id
+
+        console.log(req.body.data.relationships);
+
         const city = new City(req.body.data);
 
         city.save( (err) => {
             if (err) {
                 return res.send({ errors: [ err ] });
             }
-            return res.send({ data: { message: 'City added.' } });
+            return res.send({ data: city });
         });
     });
 
 router.route('/cities/:id')
     .get( (req, res) => {
         City.findOne({_id: req.params.id}, cityConfig.getOne)
-            .populate('relationships.country.data', cityConfig.popRel)
-            .populate('relationships.region.data', cityConfig.popRel)
-            .populate('relationships.locations.data', cityConfig.popRel)
+            //.populate('relationships.country.data.id', cityConfig.popRel)
             .exec( (err, city) => {
                 if (err) {
                     return res.send({ errors: [ err ] });

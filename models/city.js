@@ -24,8 +24,14 @@ const citySchema = new Schema({
     relationships: {
         country: {
             data: {
-                type: String,
-                ref: 'Country'
+                id: {
+                    type: String,
+                    ref: 'Country'
+                },
+                type: {
+                    type: String,
+                    default: 'countries'
+                }
             }
         },
         region: {
