@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const createStringId = require('../utils/createStringId');
 
 const citySchema = new Schema({
     id: String,
@@ -33,32 +32,6 @@ const citySchema = new Schema({
                     default: 'countries'
                 }
             }
-        },
-        region: {
-            data: {
-                id: {
-                    type: String,
-                    ref: 'Region'
-                },
-                type: {
-                    type: String,
-                    default: 'regions'
-                }
-            }
-        },
-        locations: {
-            data: [
-                {
-                    id: {
-                        type: String,
-                        ref: 'Location'
-                    },
-                    type: {
-                        type: String,
-                        default: 'locations'
-                    }
-                }
-            ]
         }
     }
 }, {

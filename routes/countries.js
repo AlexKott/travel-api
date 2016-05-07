@@ -2,80 +2,80 @@
 
 const express = require('express');
 const router = express.Router();
-const includeRelationships = require('../utils/includeRelationships');
 const Country = require('../models/country');
 
+const createStringId = require('../utils/createStringId');
+const isValid = require('../utils/isValid');
+
 const countryConfig = {
-    getAll: 'type attributes',
-    getOne: ''
+    getAll: '-_id id type attributes',
+    getOne: '-_id'
 };
 
 router.route('/countries')
     .get( (req, res) => {
-        Country.find({},
-                    countryConfig.getAll,
-                    (err, countries) => {
-                if (err) {
-                    return res.send({ errors: [{ status: 500, detail: err }]});
-                }
-                res.send({ data: countries });
-            });
+        Country.find({}, countryConfig.getAll, (err, countries) => {
+            if (err) {
+                return res.status(500).send({ errors: [{ detail: err }]});
+            }
+            res.send({ data: countries });
+        });
     })
+
     .post( (req, res) => {
         const country = new Country(req.body.data);
 
-        country.save( (err) => {
-            if (err) {
-                return res.send({ errors: [{ status: 500, detail: err }]});
-            }
-            res.send({ data: country });
-        });
+        country.id = createStringId.base(country.attributes.nameEnglish);
+
+        isValid.country(country.id)
+            .then( () => {
+                country.save( (err) => {
+                    if (err) {
+                        return res.status(500).send({ errors: [{ detail: err }]});
+                    }
+                    res.status(201).send({ data: country });
+                });
+            }).catch( () => {
+                res.status(409)
+                    .send({ errors: [{ detail: 'Country already exists!' }]});
+            });
     });
 
 router.route('/countries/:id')
     .get( (req, res) => {
-        Country.findOne({ _id: req.params.id },
-                        countryConfig.getOne,
-                        (err, country) => {
+        Country.findOne({ id: req.params.id }, countryConfig.getOne, (err, country) => {
             if (err) {
-                return res.send({ errors: [{ status: 500, detail: err }]});
+                return res.status(500).send({ errors: [{ detail: err }]});
+            } else if (!country) {
+                return res.status(404)
+                    .send({ errors: [{ detail: `${req.params.id} not found!` }]});
             }
-            if (country.relationships.cities.data.length > 0) {
-                Promise
-                    .all([
-                        includeRelationships.cities(country.relationships.cities.data),
-                    ])
-                    .then( (includes) => {
-                        country.includes = includes;
-                        res.send({ data: country });
-                    });
-            }
-            else {
-                res.send({ data: country });
-            }
+            res.send({ data: country });
         });
     })
+
     .patch( (req, res) => {
-        Country.findOneAndUpdate({ _id: req.params.id },
-                                req.body.data,
-                                { new: true },
+        Country.findOneAndUpdate({ id: req.params.id }, req.body.data, { new: true },
                                 (err, country) => {
             if (err) {
-                return res.send({ errors: [{ status: 500, detail: err }]});
+                return res.status(500).send({ errors: [{ detail: err }]});
+            } else if (!country) {
+                return res.status(404)
+                    .send({ errors: [{ detail: `${req.params.id} not found!` }]})
             }
             res.send({ data: country });
         });
     })
+
     .delete( (req, res) => {
-        Country.findOneAndRemove({ _id: req.params.id },
-                                (err, country) => {
+        Country.findOneAndRemove({ id: req.params.id }, (err, country) => {
             if (err) {
-                return res.send({ errors: [{ status: 500, detail: err }]});
+                return res.status(500).send({ errors: [{ detail: err }]});
+            } else if (!country) {
+                return res.status(404)
+                    .send({ errors: [{ detail: `${req.params.id} not found!` }]})
             }
-            if (!country) {
-                return res.send({ errors: [{ status: 404, detail: `${req.params.id} not found!` }]})
-            }
-            res.send({ data: country });
+            res.status(204).send();
         });
     });
 

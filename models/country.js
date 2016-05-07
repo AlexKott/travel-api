@@ -2,10 +2,9 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const createStringId = require('../utils/createStringId');
 
 const countrySchema = new Schema({
-    _id: String,
+    id: String,
     type: {
         type: String,
         default: 'countries'
@@ -67,7 +66,9 @@ const countrySchema = new Schema({
         ],
         links: [
             {
-                type: String,
+                type: {
+                    type: String
+                },
                 name: String,
                 url: String
             }
@@ -85,34 +86,6 @@ const countrySchema = new Schema({
                     default: 'cities'
                 }
             }
-        },
-        cities: {
-            data: [
-                {
-                    id: {
-                        type: String,
-                        ref: 'City'
-                    },
-                    type: {
-                        type: String,
-                        default: 'cities'
-                    }
-                }
-            ]
-        },
-        regions: {
-            data: [
-                {
-                    id: {
-                        type: String,
-                        ref: 'Region'
-                    },
-                    type: {
-                        type: String,
-                        default: 'regions'
-                    }
-                }
-            ]
         },
         languagesOfficial: {
             data: [
@@ -153,37 +126,15 @@ const countrySchema = new Schema({
                     default: 'currencies'
                 }
             }
-        },
-        locations: {
-            data: [
-                {
-                    id: {
-                        type: String,
-                        ref: 'Location'
-                    },
-                    type: {
-                        type: String,
-                        default: 'locations'
-                    }
-                }
-            ]
         }
     }
 }, {
-    versionKey: false
+    versionKey: false,
+    toJSON: {
+        transform(doc, ret) {
+            delete ret._id;
+        }
+    }
 });
-
-countrySchema.path('attributes.nameEnglish').set(function(n) {
-    this._id = createStringId(n);
-    return n;
-});
-
-if (!countrySchema.options.toJSON) {
-  countrySchema.options.toJSON = {};
-}
-countrySchema.options.toJSON.transform = function(doc, ret) {
-  ret.id = ret._id;
-  delete ret._id;
-};
 
 module.exports = mongoose.model('Country', countrySchema);
