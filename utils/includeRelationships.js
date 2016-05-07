@@ -1,24 +1,28 @@
 'use strict';
 
 const City = require('../models/city');
+const Country = require('../models/country');
 
 const includeConfig = {
-    cities: '_id type attributes.nameEnglish'
+    all: '-_id id type attributes relationships'
 };
 
 module.exports = {
-    cities(data) {
-        return new Promise( (resolve, reject) => {
-            includes = [];
-            data.forEach( (city) => {
-                City.findOne({ _id: city.id },
-                            includeConfig.cities,
-                            (err, city) => {
-                    if (!err) {
-                        includes.push(city);
-                    }
-                });
+    base (Model, criteria, projection) {
+        return new Promise( ( resolve, reject) => {
+            Model.find(criteria, projection, (err, docs) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(docs);
+                }
             });
         });
+    },
+    cities(criteria) {
+        return this.base(City, criteria, includeConfig.all);
+    },
+    country(criteria) {
+        return this.base(Country, criteria, includeConfig.all);
     }
 };

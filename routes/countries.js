@@ -6,6 +6,7 @@ const Country = require('../models/country');
 
 const createStringId = require('../utils/createStringId');
 const isValid = require('../utils/isValid');
+const includeRelationships = require('../utils/includeRelationships');
 
 const countryConfig = {
     getAll: '-_id id type attributes',
@@ -43,14 +44,33 @@ router.route('/countries')
 
 router.route('/countries/:id')
     .get( (req, res) => {
-        Country.findOne({ id: req.params.id }, countryConfig.getOne, (err, country) => {
+        Country.findOne({ id: req.params.id }, countryConfig.getOne).lean()
+                        .exec( (err, country) => {
             if (err) {
                 return res.status(500).send({ errors: [{ detail: err }]});
             } else if (!country) {
                 return res.status(404)
                     .send({ errors: [{ detail: `${req.params.id} not found!` }]});
             }
-            res.send({ data: country });
+
+            const includeCities = includeRelationships.cities(
+                { 'relationships.country.data.id': req.params.id });
+            Promise.all([includeCities]).then( (values) => {
+                let docs = [].concat.apply([], values);
+
+                country.relationships.cities = { data: [] };
+
+                docs.forEach( (d) => {
+                    country.relationships.cities.data.push({ id: d.id, type: d.type });
+                });
+
+                res.send({ data: country, included: docs });
+                
+            }).catch( (err) => {
+                console.log(err);
+                res.status(500)
+                    .send({ errors: [{ detail: err }]});
+            });
         });
     })
 

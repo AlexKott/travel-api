@@ -5,6 +5,7 @@ const City = require('../models/city');
 
 const createStringId = require('../utils/createStringId');
 const isValid = require('../utils/isValid');
+const includeRelationships = require('../utils/includeRelationships');
 
 const cityConfig = {
     getAll: '-_id id type attributes relationships.country',
@@ -46,14 +47,21 @@ router.route('/cities')
 
 router.route('/cities/:id')
     .get( (req, res) => {
-        City.findOne({id: req.params.id}, cityConfig.getOne, (err, city) => {
+        City.findOne({id: req.params.id}, cityConfig.getOne).lean()
+                        .exec( (err, city) => {
             if (err) {
                 return res.status(500).send({ errors: [{ detail: err }]});
             } else if (!city) {
                 return res.status(404)
                     .send({ errors: [{ detail: `${req.params.id} not found!` }]});
             }
-            res.send({ data: city });
+            const includeCountry = includeRelationships.country(
+                { 'id': city.relationships.country.data.id });
+            Promise.all([includeCountry]).then( (values) => {
+                let docs = [].concat.apply([], values);
+                
+                res.send({ data: city, included: docs });
+            });
         });
     })
 
