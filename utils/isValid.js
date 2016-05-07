@@ -1,5 +1,9 @@
 const City = require('../models/city');
 const Country = require('../models/country');
+const Currency = require('../models/currency');
+const Language = require('../models/language');
+const Location = require('../models/location');
+const Region = require('../models/region');
 
 module.exports = {
     base (Model, id) {
@@ -18,5 +22,17 @@ module.exports = {
     },
     country (id) {
         return this.base(Country, id);
+    },
+    currency (id) {
+        return this.base(Currency, id);
+    },
+    language (id) {
+        return this.base(Language, id);
+    },
+    location (id) {
+        return this.base(Location, id);
+    },
+    region (id) {
+        return this.base(Region, id);
     }
 }

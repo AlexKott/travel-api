@@ -32,6 +32,18 @@ const citySchema = new Schema({
                     default: 'countries'
                 }
             }
+        },
+        region: {
+            data: {
+                id: {
+                    type: String,
+                    ref: 'Region'
+                },
+                type: {
+                    type: String,
+                    default: 'regions'
+                }
+            }
         }
     }
 }, {

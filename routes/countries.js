@@ -6,10 +6,10 @@ const Country = require('../models/country');
 
 const createStringId = require('../utils/createStringId');
 const isValid = require('../utils/isValid');
-const includeRelationships = require('../utils/includeRelationships');
+const populateCountry = require('../utils/populateCountry');
 
 const countryConfig = {
-    getAll: '-_id id type attributes',
+    getAll: '-_id id type attributes.nameEnglish',
     getOne: '-_id'
 };
 
@@ -53,9 +53,7 @@ router.route('/countries/:id')
                     .send({ errors: [{ detail: `${req.params.id} not found!` }]});
             }
 
-            const includeCities = includeRelationships.cities(
-                { 'relationships.country.data.id': req.params.id });
-            Promise.all([includeCities]).then( (values) => {
+            Promise.all(populateCountry(country)).then( (values) => {
                 let docs = [].concat.apply([], values);
 
                 country.relationships.cities = { data: [] };
@@ -65,7 +63,7 @@ router.route('/countries/:id')
                 });
 
                 res.send({ data: country, included: docs });
-                
+
             }).catch( (err) => {
                 console.log(err);
                 res.status(500)
@@ -74,7 +72,7 @@ router.route('/countries/:id')
         });
     })
 
-    .patch( (req, res) => {
+    .patch( (req, res) => { // TODO: update ID if name has changed, rerun validation
         Country.findOneAndUpdate({ id: req.params.id }, req.body.data, { new: true },
                                 (err, country) => {
             if (err) {

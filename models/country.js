@@ -126,6 +126,20 @@ const countrySchema = new Schema({
                     default: 'currencies'
                 }
             }
+        },
+        regions: {
+            data: [
+                {
+                    id: {
+                        type: String,
+                        ref: 'Region'
+                    },
+                    type: {
+                        type: String,
+                        default: 'regions'
+                    }
+                }
+            ]
         }
     }
 }, {

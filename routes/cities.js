@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const City = require('../models/city');
@@ -24,9 +25,13 @@ router.route('/cities')
 
     .post( (req, res) => {
         const city = new City(req.body.data);
+        const countryName = _.get(city, 'relationships.country.data.id');
 
-        city.id = createStringId.city(city.attributes.nameEnglish,
-                                    city.relationships.country.data.id);
+        /* TODO: Refactor validation to external service */
+        if (!countryName) {
+            return res.status(422).send({ errors: [{ detail: 'No country provided!' }]});
+        }
+        city.id = createStringId.city(city.attributes.nameEnglish, countryName);
 
         isValid.city(city.id)
             .then( () => {
@@ -55,17 +60,27 @@ router.route('/cities/:id')
                 return res.status(404)
                     .send({ errors: [{ detail: `${req.params.id} not found!` }]});
             }
-            const includeCountry = includeRelationships.country(
-                { 'id': city.relationships.country.data.id });
-            Promise.all([includeCountry]).then( (values) => {
+
+            let includes = [];
+            const countryId = _.get(city, 'relationships.country.data.id');
+            const regionId = _.get(city, 'relationships.region.data.id');
+
+            if (countryId) {
+                includes.push(includeRelationships.countries({ 'id': countryId }));
+            }
+            if (regionId) {
+                includes.push(includeRelationships.regions({ 'id': regionId }));
+            }
+
+            Promise.all(includes).then( (values) => {
                 let docs = [].concat.apply([], values);
-                
+
                 res.send({ data: city, included: docs });
             });
         });
     })
 
-    .patch( (req, res) => {
+    .patch( (req, res) => { // TODO: update ID if name has changed, rerun validation
         City.findOneAndUpdate({ id: req.params.id }, req.body.data, { new: true },
                             (err, city) => {
             if (err) {
